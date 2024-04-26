@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.11/htmx.min.js"
+                integrity="sha512-9KsixJxn00SQfLkrArzXRFi3QyqP4RyIzYgj2Ho4YJSLEOHS00uhDQdc7dv6N8PS5OsYZWKiY0/7DsZRlcv/DQ=="
+                crossorigin="anonymous"
+                referrerpolicy="no-referrer"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User List</title>
+    </head>
+    <body>
+        <div>
+            {% if user.is_authenticated %}
+                Hi {{ user.get_username }}!
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Log Out</button>
+                </form>
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="#">Navbar</a>
+                        <button class="navbar-toggler"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#navbarNav"
+                                aria-controls="navbarNav"
+                                aria-expanded="false"
+                                aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                       class="menu-link"
+                                       hx-get="{% url 'home' %}"
+                                       hx-target="#content-div"
+                                       hx-push-url="true">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                       class="menu-link"
+                                       hx-get="{% url 'forms' %}"
+                                       hx-target="#content-div"
+                                       hx-push-url="true">forms</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            {% else %}
+                <p>You are not logged in</p>
+                <a href="{% url 'index' %}">Log In</a>
+            {% endif %}
+        </div>
+        <div id="content-div" hx-history-elt>
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </body>
+</html>

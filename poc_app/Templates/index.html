@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DataTables with AJAX in Django</title>
+        <link rel="stylesheet"
+              type="text/css"
+              href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.min.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.5/js/dataTables.min.js"></script>
+
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script> -->
+
+        
+        <!-- DevExtreme theme -->
+        <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/23.1.6/css/dx.light.css">
+        <!-- <link href="https://cdn3.devexpress.com/jslib/23.2.3/css/dx.light.css" rel="stylesheet" integrity="sha384-grKdJGK47q8fJlIjJPo9mJl/xByZHymCvRL2NhaWcrEOXkIBEqGkt/jrOQDNnzAc sha512-MRaqf89h3OJc4Is9J+YUeoba2DeeQRpAdk5e/X5lMW74L5TaqULmCJpryLLJD5MBmTA5qHTIUHrWiNOeGvdGxA==" crossorigin="anonymous"> -->
+
+        
+        <!-- DevExtreme libraries (reference only one of them) -->
+        <!-- <script type="text/javascript" src="https://unpkg.com/devextreme-dist@24.1-next/dist/js/dx.all.js"></script> -->
+        <!-- <script type="text/javascript" src="https://unpkg.com/devextreme@22.1.3/dist/js/dx.all.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme-dist/23.2.5/js/dx.all.js"></script>
+
+        <!--Devexpress depedency-->
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+
+        <!-- <script type="text/javascript"
+                src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.0.0/jspdf.umd.min.js"></script> -->
+
+        <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.0.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.9/jspdf.plugin.autotable.min.js"></script> -->
+
+        <!-- Export to Excel -->
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script> -->
+
+        <!-- 22.1.3 -->
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script> -->
+
+        <!-- Export to pdf -->
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.0.0/jspdf.umd.min.js"></script> -->
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script> -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+
+
+
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.0.0/jspdf.umd.min.js"></script> -->
+
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.0.0/jspdf.umd.min.js"></script> -->
+
+        <!-- jspdf -->
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script> -->
+
+
+        
+
+    <style>
+      .btn{
+        color: #fff;
+        background-color: #337ab7;
+        border-color: #337ab7;
+        padding: 0.5rem 1rem; /* Adjust padding for size */
+        border-width: 2px; /* Adjust border width */
+        border-radius: 0.25rem;
+      }
+      .filter-container {
+          background-color: transparent;
+          box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.14), 0 0 2px 0 rgba(0, 0, 0, 0.12);
+          border-radius: 6px;
+          padding: 5px;
+          width: 500px;
+          margin: 24px;
+        }
+
+        .dx-filterbuilder {
+          background-color: transparent;
+          padding: 10px;
+        }
+
+        .dx-button {
+          margin: 10px;
+          float: right;
+        }
+
+        .dx-filterbuilder .dx-numberbox {
+          width: 80px;
+        }
+    </style>
+    </head>
+    <body>
+        <h5>GRID with server side</h5>
+
+        <div class="demo-container">
+          <div>
+            <input class="btn" id="toggleButton" type="button" value="Custom Filter">
+            <br>
+            <div style="display: none;" id="filter-container" class="filter-container">
+              <div id="filterBuilder"></div>
+              <div id="apply"></div>
+              <div class="dx-clearfix"></div>
+            </div>
+            <br>
+         </div>
+         <!-- <div id="exportButton"></div> -->
+         <!-- <input id="exportButton" type="button" value="Export"> -->
+          <div id="gridContainer"></div>
+        <!-- <input class="btn" id="savefilter"  type="button" value="Save Filter">  -->
+        </div>
+
+
+        <!-- <div id="gridContainer">
+
+        </div> -->
+        <script>
+
+  window.jsPDF = window.jspdf.jsPDF;
+
+  function isNotEmpty(value) {
+    return value !== undefined && value !== null && value !== '';
+  }
+
+  const fetchDatastore = new DevExpress.data.CustomStore({
+    key: 'id',
+    load(loadOptions) {
+      const deferred = $.Deferred();
+      const args = {};
+      const paramNames = [
+        'skip', 'take', 'requireTotalCount', 'requireGroupCount',
+        'sort', 'filter', 'totalSummary', 'group', 'groupSummary',
+      ];
+      paramNames
+        .filter((paramName) => isNotEmpty(loadOptions[paramName]))
+        .forEach((paramName) => { args[paramName] = JSON.stringify(loadOptions[paramName]); });
+      $.ajax({
+        url: 'http://127.0.0.1:8000/get_couponcodes_json_paging',
+        type: 'GET',
+        dataType: 'json',
+        data: args,
+        success(result) {
+          console.log(result)
+          deferred.resolve(result.coupons,
+            {
+                totalCount: result.totalCount,
+                summary: result.summary,
+                groupCount: result.groupCount,
+            }
+          );
+        },
+        error() {
+          deferred.reject('Data Loading Error');
+        },
+        timeout: 5000,
+      });
+
+      return deferred.promise();
+    },
+  });
+
+function fetchDataFromAPI() {
+  return new Promise(function(resolve, reject) {
+    $.ajax({
+      url: 'http://127.0.0.1:8000/get_fields',
+      method: 'GET',
+      dataType: 'json',
+      success: function(data) {
+        resolve(data);
+      },
+      error: function(xhr, status, error) {
+        reject(error);
+      }
+    });
+  });
+}
+
+
+// Function to bind data to DevExpress grid
+function bindDataToGrid() {
+
+      $('#toggleButton').click(function(){
+        $('#filter-container').toggle(); 
+      });
+
+      fetchDataFromAPI().then(function(fields) {
+        console.log(fields);
+        console.log(typeof(fields));
+        $('#filterBuilder').dxFilterBuilder({
+          fields:fields,
+          value:[
+              ['discount_percentage', '<>', 0],
+              'or', 
+              ],
+        });
+      })
+      .catch(function(error) {
+        console.error('Error fetching data:', error);
+      });
+
+      // $('#filterBuilder').dxFilterBuilder({
+      //   fields,
+      //   value: filter,
+      // });
+
+      $('#apply').dxButton({
+        text: 'Apply Filter',
+        type: 'default',
+        onClick() {
+          const filter = $('#filterBuilder').dxFilterBuilder('instance').option('value');
+          $('#gridContainer').dxDataGrid('instance').option('filterValue', filter);
+        },
+      });
+  
+const dataGrid = $("#gridContainer").dxDataGrid({
+      filterRow: {
+      visible: true,
+      applyFilter: 'auto',
+    },
+      export: {
+            enabled: true,
+            formats: ['xlsx', 'pdf'],
+        },
+        onExporting(e) {
+            if (e.format === 'xlsx') {
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet('data');
+                DevExpress.excelExporter.exportDataGrid({
+                    component: e.component,
+                    worksheet,
+                    autoFilterEnabled: true,
+                }).then(() => {
+                    workbook.xlsx.writeBuffer().then((buffer) => {
+                    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'datagrid.xlsx');
+                    });
+                });
+            } 
+            else if (e.format === 'pdf') {
+              const doc = new jsPDF();
+              DevExpress.pdfExporter.exportDataGrid({
+                jsPDFDocument: doc,
+                component: e.component,
+                indent: 5,
+              }).then(() => {
+                doc.save('datagrid.pdf');
+              });
+            }
+        },
+        columnChooser: { enabled: true ,  mode: 'select'},       
+        dataSource: fetchDatastore,
+        columns: [          
+            { dataField: 'id', caption: 'ID' },
+            { dataField: 'coupon_code', caption: 'Coupon Code' },
+            { dataField: 'effective_from', caption: 'Effective From' },
+            { dataField: 'effective_till', caption: 'Effective Till' },
+            { dataField: 'discount_percentage', caption: 'Discount Percentage' }
+        ],
+        showBorders: true,
+        paging: {
+            pageSize: 10
+        },
+        pager: {
+            showPageSizeSelector: true,
+            allowedPageSizes: [5, 10, 20],
+            showInfo: true
+        },
+        remoteOperations: {
+            filtering: true,
+            paging: true,
+            sorting: true,
+            groupPaging: true,
+            grouping: true,
+            summary: true
+        }
+    }).dxDataGrid('instance');;
+
+}
+
+// Call the fetchData function when the page loads
+$(document).ready(function () {
+  
+    bindDataToGrid();
+});
+
+        </script>
+    </body>
+</html>

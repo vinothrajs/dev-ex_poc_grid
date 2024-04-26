@@ -1,0 +1,25 @@
+{% extends template %}
+{% block content %}
+    {{ role }}
+    <h1>Users List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Date of Birth</th>
+                <th>Active</th>
+                <th>Admin</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.date_of_birth }}</td>
+                    <td>{{ user.is_active }}</td>
+                    <td>{{ user.is_admin }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

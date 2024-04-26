@@ -1,0 +1,7 @@
+[tool.black]
+line-length = 100
+target-version = ['py312']
+include = '\.pyi?$'
+[tool.djlint]
+profile = "django"
+ignore = "H031"
