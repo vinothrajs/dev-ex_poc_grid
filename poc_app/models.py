@@ -399,3 +399,11 @@ class Coupon(models.Model):
 
     def __str__(self):
         return self.coupon_code
+
+
+class Custom_filter(models.Model):
+    id = models.AutoField(primary_key=True)
+    filter = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.filter

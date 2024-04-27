@@ -8,6 +8,7 @@ urlpatterns = [
     path("home/", views.home, name="home"),
     path("forms/", views.forms, name="forms"),
     path("get_couponcodes_json_paging/", views.get_couponcodes_json_paging, name="get_couponcodes_json_paging"),
-    path("get_fields/", views.get_fields, name="get_fields")
+    path("get_fields/", views.get_fields, name="get_fields"),
+    path("save_custom_filter/", views.save_custom_filter, name="save_custom_filter")
 
 ]
