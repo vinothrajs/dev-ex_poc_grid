@@ -165,137 +165,137 @@ def generic_sql(value):
     return value
 
 
-# def filter_to_sql(filter_list, table_name):
-#     sql_query = ""    
+# def filter_to_sql(filter_list):
+#     sql_query = ""
+    
+#     def process_condition(condition):
+#         nonlocal sql_query
+#         if condition[1] == "anyof":
+#             sql_query += "{} IN ({}) ".format(condition[0], ", ".join(["'{}'".format(value) for value in condition[2]]))
+#         elif condition[1] == "between":
+#             sql_query += "{} BETWEEN {} AND {} ".format(condition[0], condition[2][0], condition[2][1])
+#         elif condition[1] in ("=", "<>", "<", ">", "<=", ">="):
+#             sql_query += "{} {} '{}' ".format(condition[0], condition[1], condition[2])
+#         elif condition[1] in ("contains", "notcontains", "startswith", "endswith"):
+#             sql_query += "{} LIKE '%{}%' ".format(condition[0], condition[2]) if condition[1] == "contains" else \
+#                          "{} NOT LIKE '%{}%' ".format(condition[0], condition[2]) if condition[1] == "notcontains" else \
+#                          "{} LIKE '{}%' ".format(condition[0], condition[2]) if condition[1] == "startswith" else \
+#                          "{} LIKE '%{}' ".format(condition[0], condition[2])
+    
 #     if isinstance(filter_list, list):
-#         if type(filter_list[0]) == str:
-#             condition = filter_list
-#             if isinstance(condition, list):
-#                 if condition[1] == "anyof":
-#                     sql_query += "{} IN ({}) ".format(condition[0], ", ".join(["'{}'".format(value) for value in condition[2]]))
-#                 elif condition[1] == "between":
-#                     sql_query += "{} BETWEEN {} AND {} ".format(condition[0], condition[2][0], condition[2][1])
-#                 elif condition[1] == "=":
-#                     sql_query += "{} = '{}' ".format(condition[0], condition[2])
-#                 elif condition[1] == "<>":
-#                     sql_query += "{} <> '{}' ".format(condition[0], condition[2])
-#                 elif condition[1] == "<":
-#                     sql_query += "{} < '{}' ".format(condition[0], condition[2])
-#                 elif condition[1] == ">":
-#                     sql_query += "{} > '{}' ".format(condition[0], condition[2])
-#                 elif condition[1] == "<=":
-#                         sql_query += "{} <= '{}' ".format(condition[0], condition[2])
-#                 elif condition[1] == ">=":
-#                     sql_query += "{} >= '{}' ".format(condition[0], condition[2])
-#                 elif condition[1] == "contains":
-#                     sql_query += "{} LIKE '%{}%' ".format(condition[0], condition[2])
-#                 elif condition[1] == "notcontains":
-#                     sql_query += "{} NOT LIKE '%{}%' ".format(condition[0], condition[2])
-#                 elif condition[1] == "startswith":
-#                     sql_query += "{} LIKE '{}%' ".format(condition[0], condition[2])
-#                 elif condition[1] == "endswith":
-#                     sql_query += "{} LIKE '%{}' ".format(condition[0], condition[2])
-#             elif condition == "or":
-#                 sql_query += "OR "
-#             elif condition == "and":
-#                 sql_query += "AND "
-#             pass
+#         if isinstance(filter_list[0], str):
+#             process_condition(filter_list)
 #         else:
 #             for condition in filter_list:
-                
-#                 if isinstance(condition, list):
-#                     if condition[1] == "anyof":
-#                         sql_query += "{} IN ({}) ".format(condition[0], ", ".join(["'{}'".format(value) for value in condition[2]]))
-#                     elif condition[1] == "between":
-#                         sql_query += "{} BETWEEN {} AND {} ".format(condition[0], condition[2][0], condition[2][1])
-#                     elif condition[1] == "=":
-#                         sql_query += "{} = '{}' ".format(condition[0], condition[2])
-#                     elif condition[1] == "<":
-#                         sql_query += "{} < '{}' ".format(condition[0], condition[2])
-#                     elif condition[1] == ">":
-#                         sql_query += "{} > '{}' ".format(condition[0], condition[2])
-#                     elif condition[1] == "<>":
-#                         sql_query += "{} <> '{}' ".format(condition[0], condition[2])
-#                     elif condition[1] == "<=":
-#                         sql_query += "{} <= '{}' ".format(condition[0], condition[2])
-#                     elif condition[1] == ">=":
-#                         sql_query += "{} >= '{}' ".format(condition[0], condition[2])
-#                     elif condition[1] == "contains":
-#                         sql_query += "{} LIKE '%{}%' ".format(condition[0], condition[2])
-#                     elif condition[1] == "notcontains":
-#                         sql_query += "{} NOT LIKE '%{}%' ".format(condition[0], condition[2])
-#                     elif condition[1] == "startswith":
-#                         sql_query += "{} LIKE '{}%' ".format(condition[0], condition[2])
-#                     elif condition[1] == "endswith":
-#                         sql_query += "{} LIKE '%{}' ".format(condition[0], condition[2])
-
-#                     elif isinstance(condition, list):
-#                         for condition in filter_list:                
-#                             if isinstance(condition, list):
-#                                 if condition[1] == "anyof":
-#                                     sql_query += "{} IN ({}) ".format(condition[0], ", ".join(["'{}'".format(value) for value in condition[2]]))
-#                                 elif condition[1] == "between":
-#                                     sql_query += "{} BETWEEN {} AND {} ".format(condition[0], condition[2][0], condition[2][1])
-#                                 elif condition[1] == "=":
-#                                     sql_query += "{} = '{}' ".format(condition[0], condition[2])
-#                                 elif condition[1] == "<>":
-#                                     sql_query += "{} <> '{}' ".format(condition[0], condition[2])
-#                                 elif condition[1] == "<=":
-#                                     sql_query += "{} <= '{}' ".format(condition[0], condition[2])
-#                                 elif condition[1] == ">=":
-#                                     sql_query += "{} >= '{}' ".format(condition[0], condition[2])
-#                                 elif condition[1] == "contains":
-#                                     sql_query += "{} LIKE '%{}%' ".format(condition[0], condition[2])
-#                                 elif condition[1] == "notcontains":
-#                                     sql_query += "{} NOT LIKE '%{}%' ".format(condition[0], condition[2])
-#                                 elif condition[1] == "startswith":
-#                                     sql_query += "{} LIKE '{}%' ".format(condition[0], condition[2])
-#                                 elif condition[1] == "endswith":
-#                                     sql_query += "{} LIKE '%{}' ".format(condition[0], condition[2])
-#                             elif condition == "or":
-#                                 sql_query += "OR "
-#                             elif condition == "and":
-#                                 sql_query += "AND "
-                 
-#                 elif condition == "or":
-#                     sql_query += "OR "
-#                 elif condition == "and":
-#                     sql_query += "AND "
-#     else:  # Handling single condition without list
+#                 if isinstance(condition[0], list): 
+#                     for conditions in condition:
+#                         if isinstance(condition[0], list): 
+#                             for val in conditions:
+#                                 print(val)
+#                                 if isinstance(val, list):
+#                                     process_condition(val)
+#                                 elif val in ("or", "and"):
+#                                     sql_query += val.upper() + " "  
+#                         if isinstance(conditions, list):
+#                             process_condition(conditions)
+#                         elif conditions in ("or", "and"):
+#                             sql_query += conditions.upper() + " " 
+#                 elif condition in ("or", "and"):
+#                             sql_query += condition.upper() + " "            
+#                 else:
+#                     if isinstance(condition[0], str):
+#                         process_condition(condition)
+#                     elif condition in ("or", "and"):
+#                         sql_query += condition.upper() + " "
+#     else:
 #         sql_query += "{} = '{}' ".format(filter_list[0], filter_list[2])
     
-#     return sql_query.rstrip("AND ").rstrip("OR ").rstrip() 
+#     return sql_query.strip("AND ").strip("OR ").strip()
+
 
 def filter_to_sql(filter_list):
     sql_query = ""
     
     def process_condition(condition):
         nonlocal sql_query
-        if condition[1] == "anyof":
-            sql_query += "{} IN ({}) ".format(condition[0], ", ".join(["'{}'".format(value) for value in condition[2]]))
-        elif condition[1] == "between":
-            sql_query += "{} BETWEEN {} AND {} ".format(condition[0], condition[2][0], condition[2][1])
-        elif condition[1] in ("=", "<>", "<", ">", "<=", ">="):
-            sql_query += "{} {} '{}' ".format(condition[0], condition[1], condition[2])
-        elif condition[1] in ("contains", "notcontains", "startswith", "endswith"):
-            sql_query += "{} LIKE '%{}%' ".format(condition[0], condition[2]) if condition[1] == "contains" else \
-                         "{} NOT LIKE '%{}%' ".format(condition[0], condition[2]) if condition[1] == "notcontains" else \
-                         "{} LIKE '{}%' ".format(condition[0], condition[2]) if condition[1] == "startswith" else \
-                         "{} LIKE '%{}' ".format(condition[0], condition[2])
-    
+        if isinstance(condition, list):
+            if isinstance(condition[0], list):
+                sql_query += "(" + filter_to_sql(condition) + ") "
+            else:
+                if condition[1] == "anyof":
+                    sql_query += "{} IN ({}) ".format(condition[0], ", ".join(["'{}'".format(value) for value in condition[2]]))
+                elif condition[1] == "between":
+                    sql_query += "{} BETWEEN {} AND {} ".format(condition[0], condition[2][0], condition[2][1])
+                elif condition[1] in ("=", "<>", "<", ">", "<=", ">="):
+                    sql_query += "{} {} '{}' ".format(condition[0], condition[1], condition[2])
+                elif condition[1] in ("contains", "notcontains", "startswith", "endswith"):
+                    sql_query += "{} LIKE '%{}%' ".format(condition[0], condition[2]) if condition[1] == "contains" else \
+                                 "{} NOT LIKE '%{}%' ".format(condition[0], condition[2]) if condition[1] == "notcontains" else \
+                                 "{} LIKE '{}%' ".format(condition[0], condition[2]) if condition[1] == "startswith" else \
+                                 "{} LIKE '%{}' ".format(condition[0], condition[2])
+        elif condition in ("or", "and"):
+            sql_query += condition.upper() + " "
+
     if isinstance(filter_list, list):
         if isinstance(filter_list[0], str):
             process_condition(filter_list)
-        else:
-            for condition in filter_list:
-                if isinstance(condition, list):
-                    process_condition(condition)
-                elif condition in ("or", "and"):
-                    sql_query += condition.upper() + " "
+        for condition in filter_list:
+            process_condition(condition)
     else:
         sql_query += "{} = '{}' ".format(filter_list[0], filter_list[2])
     
     return sql_query.strip("AND ").strip("OR ").strip()
+
+
+
+# def filter_to_sql(filter_list):   
+
+#     print(filter_list)
+#     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@") 
+#     print(filter_list)
+
+#     sql_query = ""
+    
+#     def process_condition(condition):
+#         nonlocal sql_query
+#         if condition[1] == "anyof":
+#             sql_query += "{} IN ({}) ".format(condition[0], ", ".join(["'{}'".format(value) for value in condition[2]]))
+#         elif condition[1] == "between":
+#             sql_query += "{} BETWEEN {} AND {} ".format(condition[0], condition[2][0], condition[2][1])
+#         elif condition[1] in ("=", "<>", "<", ">", "<=", ">="):
+#             sql_query += "{} {} '{}' ".format(condition[0], condition[1], condition[2])
+#         elif condition[1] in ("contains", "notcontains", "startswith", "endswith"):
+#             sql_query += "{} LIKE '%{}%' ".format(condition[0], condition[2]) if condition[1] == "contains" else \
+#                          "{} NOT LIKE '%{}%' ".format(condition[0], condition[2]) if condition[1] == "notcontains" else \
+#                          "{} LIKE '{}%' ".format(condition[0], condition[2]) if condition[1] == "startswith" else \
+#                          "{} LIKE '%{}' ".format(condition[0], condition[2])
+    
+#         if isinstance(filter_list[0], str):
+#             process_condition(filter_list)
+#         else:
+#             for condition in filter_list:
+#                 if isinstance(condition[0], list): 
+#                     for conditions in condition:
+#                         if isinstance(condition[0], list): 
+#                             for val in conditions:
+#                                 print(val)
+#                                 if isinstance(val, list):
+#                                     process_condition(val)
+#                                 elif val in ("or", "and"):
+#                                     sql_query += val.upper() + " "  
+#                         if isinstance(conditions, list):
+#                             process_condition(conditions)
+#                         elif conditions in ("or", "and"):
+#                             sql_query += conditions.upper() + " " 
+#                 elif condition in ("or", "and"):
+#                             sql_query += condition.upper() + " "            
+#                 else:
+#                     if isinstance(condition[0], str):
+#                         process_condition(condition)
+#                     elif condition in ("or", "and"):
+#                         sql_query += condition.upper() + " "
+    
+#     return sql_query.strip("AND ").strip("OR ").strip()
 
 @csrf_exempt
 def save_custom_filter(request):
@@ -356,10 +356,12 @@ def get_fields(request):
 
 @csrf_exempt
 def get_couponcodes_json_paging(request):
-    skip = int(request.GET.get('skip', 1))
+    skip = int(request.GET.get('skip', 0))
     take = int(request.GET.get('take', 10))
     sort = request.GET.get('sort')
     filter = request.GET.get('filter')
+    checkFilter = filter
+    
     if sort:
         sort = json.loads(sort)
         order_val = [val for val in sort]
@@ -373,9 +375,11 @@ def get_couponcodes_json_paging(request):
 
     if filter:
         filter = json.loads(filter)
-        print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^6")  
-        print(filter)
+        print(filter)      
         filter = filter_to_sql(filter)
+        
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+        print("SQL WHERE clause:", filter)
     else:
         filter = "id <> 0"
 
@@ -389,7 +393,7 @@ def get_couponcodes_json_paging(request):
     # Calculate start and end index for pagination
     # start_index = (page_number - 1) * items_per_page
     # end_index = start_index + items_per_page
-    total_count = 0
+    
     # Execute raw SQL query for paginated data
     with connection.cursor() as cursor:
         cursor.execute("""
@@ -401,15 +405,25 @@ def get_couponcodes_json_paging(request):
             """.format(filter,sort,skip,take))
         
         rows = cursor.fetchall()
+        # print("Total count: ",len(rows))
         columns = [col[0] for col in cursor.description]
         # Convert fetched data to list of dictionaries
         data = []
         for row in rows:
             row_data = dict(zip(columns, row))
             data.append(row_data)
+        
+        cursor.execute("SELECT COUNT(*) FROM public.poc_app_coupon WHERE {} ".format(filter))
+        filterRows = cursor.fetchone()
+        # print("filterRows: ", filterRows[0])
 
         cursor.execute("SELECT COUNT(*) FROM public.poc_app_coupon")
-        total_count = cursor.fetchone()[0]
+
+        if checkFilter == None:
+            total_count = cursor.fetchone()[0]
+            
+        else:
+            total_count = filterRows[0]
     # Construct response data
     response_data = {
         "totalCount": total_count,

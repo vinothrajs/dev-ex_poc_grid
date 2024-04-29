@@ -162,6 +162,7 @@ function bindDataToGrid() {
 
       fetchDataFromAPI().then(function(field) {
         $('#filterBuilder').dxFilterBuilder({
+          groupOperations: ['and', 'or'],
           fields:field.fields,
           value:field.value,
           onValueChanged: function(e) {
@@ -203,13 +204,13 @@ function bindDataToGrid() {
       });
   
 const dataGrid = $("#gridContainer").dxDataGrid({
-      filterRow: {
-      visible: true,
-      applyFilter: 'auto',
-    },
+        filterRow: {
+        visible: true,
+        applyFilter: 'auto',
+      },
       export: {
             enabled: true,
-            formats: ['xlsx', 'pdf'],
+            formats: ['xlsx', 'pdf' , 'csv'],
         },
         onExporting(e) {
             if (e.format === 'xlsx') {
@@ -235,6 +236,22 @@ const dataGrid = $("#gridContainer").dxDataGrid({
                 doc.save('datagrid.pdf');
               });
             }
+            else if (e.format === 'csv') {
+              const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('Employees');
+            DevExpress.excelExporter.exportDataGrid({
+                component: e.component,
+                worksheet: worksheet
+            }).then(function() {
+                // https://github.com/exceljs/exceljs#writing-csv
+                // https://github.com/exceljs/exceljs#reading-csv
+                workbook.csv.writeBuffer().then(function(buffer) {
+                    saveAs(new Blob([buffer], { type: "application/octet-stream" }), "Report.csv");
+                });
+            });
+              
+            }
+
         },
         columnChooser: { enabled: true ,  mode: 'select'},       
         dataSource: fetchDatastore,
